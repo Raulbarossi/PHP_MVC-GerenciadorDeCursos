@@ -21,9 +21,10 @@ class Persistencia implements InterfaceControladorRequisicao
   {
 
     $curso = new Curso();
-    $curso->setDescricao($_POST['descricao']);
+    $curso->setDescricao(strip_tags($_POST['descricao']));
     $this->entityManager->persist($curso);
     $this->entityManager->flush();
-
+    
+    header('Location: /listar-cursos', true, 302);
   }
 }

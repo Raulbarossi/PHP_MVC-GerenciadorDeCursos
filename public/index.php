@@ -6,19 +6,15 @@ use Alura\Cursos\Controller\FormularioInsercao;
 use Alura\Cursos\Controller\ListarCursos;
 use Alura\Cursos\Controller\Persistencia;
 
-switch ($_SERVER['PATH_INFO']){
-  case '/listar-cursos':
-    $controlador = new ListarCursos();
-    $controlador->processaRequisicao();
-    break;
-  case '/novo-curso':
-    $controlador = new FormularioInsercao();
-    $controlador->processaRequisicao();
-    break;
-  case '/salvar-curso':
-    $controlador = new Persistencia();
-    $controlador->processaRequisicao();
-    break;
-  default:
-  echo "Erro 404";
+$caminho = $_SERVER['PATH_INFO'];
+$rotas = require __DIR__. "/../config/Routes.php";
+
+if (!array_key_exists($caminho, $rotas)){
+  http_response_code(404); die;
 }
+
+$classeControladora = $rotas[$caminho];
+/** @var Alura\cursos\Controller\InterfaceControladorRequisicao */
+$controlador = new $classeControladora;
+$controlador->processaRequisicao();
+
